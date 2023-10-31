@@ -14,7 +14,7 @@ names = [_ for _ in alphabet]
 df = pd.DataFrame(A, index=names, columns=names)
 
 dataset = load_dataset("oscar-corpus/OSCAR-2301",
-                       use_auth_token=True, # required
+                       token=True, # required
                         language="fr", 
                         streaming=True, # optional
                         split="train") # optional)
