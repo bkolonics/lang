@@ -5,6 +5,7 @@ from unidecode import unidecode
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 import numpy as np
+from collections import defaultdict
 
 alphabet = string.ascii_lowercase + ' '
 
@@ -19,6 +20,9 @@ dataset = load_dataset("oscar-corpus/OSCAR-2301",
                         streaming=True, # optional
                         split="train") # optional)
 
+dataset = dataset.shuffle()
+#dataset = dataset.take(1)
+bigram_counts = defaultdict(int)
 try:
     for d in tqdm(dataset, total=780000):
         #print(d["text"])
@@ -30,8 +34,14 @@ try:
 
 
         for i in range(len(phrase)-1):
-            df.at[phrase[i], phrase[i+1]] += 1
+            bigram = phrase[i:i+2]
+            bigram_counts[bigram] += 1
+
+            #print("Found a digramme: ", phrase[i], phrase[i+1])
 except KeyboardInterrupt:
+    # put bigram_counts into a dataframe
+    for bigram, count in bigram_counts.items():
+        df.loc[bigram[0], bigram[1]] = count
     plt.xticks(ticks=np.arange(len(alphabet)), labels=alphabet)
     plt.yticks(ticks=np.arange(len(alphabet)), labels=alphabet)
     plt.title("Digramme")
@@ -41,10 +51,12 @@ except KeyboardInterrupt:
 
 
 
-
+for bigram, count in bigram_counts.items():
+    df.loc[bigram[0], bigram[1]] = count
 plt.xticks(ticks=np.arange(len(alphabet)), labels=alphabet)
 plt.yticks(ticks=np.arange(len(alphabet)), labels=alphabet)
 plt.title("Digramme")
 plt.imshow(df, interpolation='none')
 plt.savefig("output/result_large.jpg")
 df.to_csv('output/df_large.csv', index=True, header=True, sep=',')
+print(bigram_counts)
