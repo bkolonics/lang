@@ -11,7 +11,9 @@ from st_keyup import st_keyup
 
 user_input = ""
 # input text
-user_input = st_keyup("Enter a value", key="0", value=user_input)
+st.header("Language Detector")
+st.write("Enter some text below ")
+user_input = st_keyup("Enter something", key="0", value=user_input)
 
 
 # get bigrams
@@ -53,10 +55,12 @@ for bigram, count in bigram_counts.items():
 # load dataset
 df_fr = pd.read_csv("output/fr_df_large_norm.csv", index_col=0)
 df_en = pd.read_csv("output/en_df_large_norm.csv", index_col=0)
+df_de = pd.read_csv("output/de_df_large_norm.csv", index_col=0)
 
 df_langs = {
     'french': df_fr,
-    'english': df_en
+    'english': df_en,
+    'german': df_de
 }
 df_langs_diff = {}
 # compare bigrams to bigrams in different languages
@@ -81,3 +85,16 @@ print("Your text is most likely in the language: ")
 print(language)
 st.write("Your text is most likely in the language: ")
 st.success(language)
+
+baseline = df_langs_diff[language]
+
+# table of scores
+df_langs_diff = pd.DataFrame(df_langs_diff, index=[0])
+df_langs_diff = df_langs_diff.T
+df_langs_diff.columns = ['score']
+df_langs_diff = df_langs_diff.sort_values(by='score', ascending=True)
+df_langs_diff = df_langs_diff.reset_index()
+df_langs_diff.columns = ['language', 'score']
+df_langs_diff['score'] = "-" + ((df_langs_diff['score'] / baseline - 1) *100).astype(str)
+df_langs_diff = df_langs_diff.iloc[1:]
+st.write(df_langs_diff)
