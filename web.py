@@ -1,11 +1,7 @@
 import streamlit as st
-from datasets import load_dataset
 import string
 import pandas as pd
 from unidecode import unidecode
-from tqdm import tqdm
-import matplotlib.pyplot as plt
-import numpy as np
 from collections import defaultdict
 from st_keyup import st_keyup
 
