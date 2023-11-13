@@ -55,8 +55,8 @@ df_fr = pd.read_csv("output/fr_df_large_norm.csv", index_col=0)
 df_en = pd.read_csv("output/en_df_large_norm.csv", index_col=0)
 
 df_langs = {
-    'fr': df_fr,
-    'en': df_en
+    'french': df_fr,
+    'english': df_en
 }
 df_langs_diff = {}
 # compare bigrams to bigrams in different languages
@@ -80,4 +80,4 @@ language = min(df_langs_diff, key=df_langs_diff.get)
 print("Your text is most likely in the language: ")
 print(language)
 st.write("Your text is most likely in the language: ")
-st.write(language)
+st.success(language)
