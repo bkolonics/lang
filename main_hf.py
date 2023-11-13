@@ -50,7 +50,6 @@ except KeyboardInterrupt:
     df.to_csv('output/df_large.csv', index=True, header=True, sep=',')
 
 
-
 for bigram, count in bigram_counts.items():
     df.loc[bigram[0], bigram[1]] = count
 plt.xticks(ticks=np.arange(len(alphabet)), labels=alphabet)
