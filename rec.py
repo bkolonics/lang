@@ -49,25 +49,29 @@ for bigram, count in bigram_counts.items():
 
 # load dataset
 df_fr = pd.read_csv("output/fr_df_large_norm.csv", index_col=0)
+df_en = pd.read_csv("output/en_df_large_norm.csv", index_col=0)
 
 df_langs = {
     'fr': df_fr,
+    'en': df_en
 }
 df_langs_diff = {}
 # compare bigrams to bigrams in different languages
 
 
 for lang, df_lang in df_langs.items():
-    df_diff = df - df_lang
-    df_diff = df_diff.abs()
-    df_diff = df_diff.sum().sum()
-    df_langs_diff[lang] = df_diff
+    df_comp = df_lang - df
+    df_comp = df_comp.fillna(0)
+    df_comp = df_comp.abs()
+    df_comp = df_comp.sum().sum()
+    df_langs_diff[lang] = df_comp
+
 
 print(df_langs_diff)
 
 # score each language
 
-language = max(df_langs_diff, key=df_langs_diff.get)
+language = min(df_langs_diff, key=df_langs_diff.get)
 
 # return language with highest score
 print("Your text is most likely in the language: ")
