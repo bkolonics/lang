@@ -11,7 +11,8 @@ from st_keyup import st_keyup
 
 user_input = ""
 # input text
-st.header("Language Detector")
+st.title("Language Detector")
+st.caption("This app uses a simple bigram model to detect the language of a text. This may not be accurate for short texts, or texts that contain a lot of numbers or symbols. The model is trained on the [OSCAR Corpus](https://oscar-project.org/) dataset, which contains scrapped text from the web. The model is trained on the following languages: English, French, German.")
 st.write("Enter some text below ")
 user_input = st_keyup("Enter something", key="0", value=user_input)
 
