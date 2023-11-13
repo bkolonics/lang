@@ -1,3 +1,4 @@
+import streamlit as st
 from datasets import load_dataset
 import string
 import pandas as pd
@@ -6,10 +7,12 @@ from tqdm import tqdm
 import matplotlib.pyplot as plt
 import numpy as np
 from collections import defaultdict
+from st_keyup import st_keyup
 
-
+user_input = ""
 # input text
-user_input = input("Enter some text: ")
+user_input = st_keyup("Enter a value", key="0", value=user_input)
+
 
 # get bigrams
 
@@ -52,8 +55,8 @@ df_fr = pd.read_csv("output/fr_df_large_norm.csv", index_col=0)
 df_en = pd.read_csv("output/en_df_large_norm.csv", index_col=0)
 
 df_langs = {
-    'fr': df_fr,
-    'en': df_en
+    'french': df_fr,
+    'english': df_en
 }
 df_langs_diff = {}
 # compare bigrams to bigrams in different languages
@@ -67,7 +70,7 @@ for lang, df_lang in df_langs.items():
     df_langs_diff[lang] = df_comp
 
 
-print(df_langs_diff)
+#print(df_langs_diff)
 
 # score each language
 
@@ -76,3 +79,5 @@ language = min(df_langs_diff, key=df_langs_diff.get)
 # return language with highest score
 print("Your text is most likely in the language: ")
 print(language)
+st.write("Your text is most likely in the language: ")
+st.success(language)
